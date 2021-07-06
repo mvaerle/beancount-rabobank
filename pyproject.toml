@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "beancount-rabobank"
+version = "0.1.0"
+description = "Beancount importer for Rabobank CSV exports"
+license = "MIT"
+authors = ["Marijn van Aerle <marijn.vanaerle@gmail.com>"]
+repository = "https://github.com/mvaerle/beancount-rabobank"
+include = ["README.md", "LICENSE.md"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+autopep8 = "^1.5.7"
+beancount = "^2.3.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
