@@ -1,11 +1,13 @@
 [tool.poetry]
 name = "beancount-rabobank"
-version = "0.1.0"
+version = "0.2.0"
+readme = "README.md"
 description = "Beancount importer for Rabobank CSV exports"
 license = "MIT"
 authors = ["Marijn van Aerle <marijn.vanaerle@gmail.com>"]
 repository = "https://github.com/mvaerle/beancount-rabobank"
 include = ["README.md", "LICENSE.md"]
+keywords = ["banking", "beancount", "cli-accounting", "finance"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
