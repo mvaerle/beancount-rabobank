@@ -14,7 +14,17 @@ RABOBANK_FILE_PATTERNS = [
 
 RABOBANK_HEADER_PATTERNS = [
     r"\"IBAN/BBAN\",\"Munt\",\"BIC\",\"Volgnr\",\"Datum\",\"Rentedatum\",\"Bedrag\",\"Saldo na trn\",\"Tegenrekening IBAN/BBAN\",\"Naam tegenpartij\",\"Naam uiteindelijke partij\",",
+    r"\"IBAN/BBAN\",\"Ccy\",\"BIC\",\"Seq No\",\"Date\",\"Value Date\",\"Amount\",\"Bal After Bkng\",\"Counterpty IBAN/BBAN\",\"Name Counterpty\",\"Name Ultimate Pty\",\"Name Initiating Pty\",\"Counterpty BIC\",\"Code\",\"Batch ID\",\"Transaction Reference\",\"Mandate Reference\",\"Collector ID\",\"Payment Reference\",\"Description-1\",\"Description-2\",\"Description-3\",\"Reasoncode\",\"Instr Amt\",\"Instr Ccy\",\"Rate\""
 ]
+
+
+DATE_PATTERNS = ["Datum", "Date"]
+COUNTERPARTY_PATTERNS = ["Naam tegenpartij", "Name Counterpty"]
+AMOUNT_PATTERNS = ["Bedrag", "Amount"]
+DESCRIPTION_1_PATTERNS = ["Omschrijving-1", "Description-1"]
+DESCRIPTION_2_PATTERNS = ["Omschrijving-2", "Description-2"]
+DESCRIPTION_3_PATTERNS = ["Omschrijving-3", "Description-3"]
+BALANCE_PATTERNS = ["Saldo na trn", "Bal After Bkng"]
 
 
 class Importer(importer.ImporterProtocol):
@@ -94,6 +104,15 @@ class Importer(importer.ImporterProtocol):
             None,
             None)
 
+    def get_row_value(self, row, pattern):
+        result = None
+        for key in pattern:
+            result = row.get(key)
+            if result:
+                break
+
+        return result
+
     def extract(self, file, existing_entries=None):
         entries = []
         index = 0
@@ -104,13 +123,24 @@ class Importer(importer.ImporterProtocol):
         for index, row in enumerate(csv.DictReader(open(file.name, mode="r", encoding="latin-1"))):
             self.meta = data.new_metadata(file.name, index)
 
-            date = self.str_to_date(row["Datum"], r"(\d{4})-(\d{2})-(\d{2})")
-            counterparty_name = row["Naam tegenpartij"]
-            amount = self.transform_rabo_amount(row["Bedrag"])
-            desc = (row["Omschrijving-1"] +
-                    row["Omschrijving-2"] + row["Omschrijving-3"]).strip()
+            date = self.str_to_date(
+                self.get_row_value(row, DATE_PATTERNS),
+                r"(\d{4})-(\d{2})-(\d{2})")
+            counterparty_name = self.get_row_value(row, COUNTERPARTY_PATTERNS)
+            amount = self.transform_rabo_amount(
+                self.get_row_value(row, AMOUNT_PATTERNS))
+
+            desc_patterns = [DESCRIPTION_1_PATTERNS,
+                             DESCRIPTION_2_PATTERNS, DESCRIPTION_3_PATTERNS]
+
+            desc = ""
+            for patterns in desc_patterns:
+                desc += self.get_row_value(row, patterns) or ""
+            desc = desc.strip()
+
             account = self.account_root
-            balance = self.transform_rabo_amount(row["Saldo na trn"])
+            balance = self.transform_rabo_amount(
+                self.get_row_value(row, BALANCE_PATTERNS))
 
             # if the account changes make a balance assertion
             if self.prev_account != account and self.prev_account != None:
