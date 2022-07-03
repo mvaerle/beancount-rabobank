@@ -1,0 +1,17 @@
+
+2020-07-01 * "Tegenpartij 1" "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce a quam ac diam est."
+  Assets:Rabobank:Checkings  442.98 EUR
+
+2020-07-01 * "Tegenpartij 2" "Lorem ipsum dolor sit amet, consectetur efficitur."
+  Assets:Rabobank:Checkings  -30.00 EUR
+
+2020-07-01 * "Tegenpartij 3" "Lorem ipsum"
+  Assets:Rabobank:Checkings  -435.00 EUR
+
+2020-07-01 * "Tegenpartij 4" "Lorem ipsum dolor sit amet, consectetur efficitur."
+  Assets:Rabobank:Checkings  -41.93 EUR
+
+2020-07-01 * "Tegenpartij 5" "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus nec nisl mollis porttitor ac sed mauris. Sed fusce."
+  Assets:Rabobank:Checkings  -241.00 EUR
+
+2020-07-02 balance Assets:Rabobank:Checkings                       2688.11 EUR
